@@ -17,15 +17,20 @@ BODY2_COLOR = (255, 200, 100)
 
 # Body 1 settings
 body1_radius = 30
-body1, body1 = np.array([WIDTH // 2 - 50, HEIGHT // 2]) # // integer division damit keine Pixel gesplittet werden
-body1_speed = np.array([0, 0])
-body1_acc = np.array([0, 0])
+body1_mass = 10e2
+body1= np.array([WIDTH // 2 - 50, HEIGHT // 2], dtype=float) # // integer division damit keine Pixel gesplittet werden
+body1_speed = np.array([0, 2], dtype=float)
+body1_acc = np.array([0, 0], dtype=float)
 
 # Body 2 settings
 body2_radius = 10
-body2 = np.array([WIDTH // 2 + 50, HEIGHT // 2])
-body2_speed = np.array([0, 0])
-body2_acc = np.array([0, 0])
+body2_mass = 10e2
+body2 = np.array([WIDTH // 2 + 50, HEIGHT // 2], dtype=float)
+body2_speed = np.array([0, -2], dtype=float)
+body2_acc = np.array([0, 0], dtype=float)
+
+# Constants
+G = 70e-2
 
 # Animation loop
 clock = pygame.time.Clock()
@@ -37,6 +42,14 @@ while True:
             pygame.quit()
             sys.exit()
             
+    distance_b1b2 = np.linalg.norm(body2 - body1)
+    if distance_b1b2 < 1:
+        distance_b1b2 = 1
+    
+    # Beschleunigungen berechnen
+    body1_acc = (G * body2_mass * (body2 - body1))/(distance_b1b2**3)
+    body2_acc = (G * body1_mass * (body1 - body2))/(distance_b1b2**3)
+    
     # Update body 1 position
     body1_speed += body1_acc
     body1 += body1_speed
@@ -47,8 +60,8 @@ while True:
     
     # Draw everything
     screen.fill(BACKGROUND_COLOR)
-    pygame.draw.circle(screen, BODY1_COLOR, body1, body1_radius)
-    pygame.draw.circle(screen, BODY2_COLOR, body2, body2_radius)
+    pygame.draw.circle(screen, BODY1_COLOR, body1.astype(int), body1_radius)
+    pygame.draw.circle(screen, BODY2_COLOR, body2.astype(int), body2_radius)
     
     # Update display
     pygame.display.flip()
