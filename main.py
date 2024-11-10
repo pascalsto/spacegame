@@ -19,7 +19,7 @@ BODY2_COLOR = (255, 200, 100)
 body1_radius = 30
 body1_mass = 10e2
 body1= np.array([WIDTH // 2 - 50, HEIGHT // 2], dtype=float) # // integer division damit keine Pixel gesplittet werden
-body1_speed = np.array([0, 2], dtype=float)
+body1_speed = np.array([0, 3], dtype=float)
 body1_acc = np.array([0, 0], dtype=float)
 
 # Body 2 settings
@@ -28,6 +28,9 @@ body2_mass = 10e2
 body2 = np.array([WIDTH // 2 + 50, HEIGHT // 2], dtype=float)
 body2_speed = np.array([0, -2], dtype=float)
 body2_acc = np.array([0, 0], dtype=float)
+
+# Kamera-Startposition
+camera_position = np.array([WIDTH // 2, HEIGHT // 2], dtype=float)
 
 # Constants
 G = 70e-2
@@ -58,10 +61,24 @@ while True:
     body2_speed += body2_acc
     body2 += body2_speed
     
+    # Kamera folgt den Körpern, wenn sie nahe an die Bildschirmränder kommen
+    if body1[0] < camera_position[0] - WIDTH // 4:
+        camera_position[0] = body1[0] + WIDTH // 4
+    elif body1[0] > camera_position[0] + WIDTH // 4:
+        camera_position[0] = body1[0] - WIDTH // 4
+    if body1[1] < camera_position[1] - HEIGHT // 4:
+        camera_position[1] = body1[1] + HEIGHT // 4
+    elif body1[1] > camera_position[1] + HEIGHT // 4:
+        camera_position[1] = body1[1] - HEIGHT // 4
+    
+    # Berechne die relativen Positionen zur Kamera
+    body1_screen_pos = body1 - camera_position + np.array([WIDTH // 2, HEIGHT // 2])
+    body2_screen_pos = body2 - camera_position + np.array([WIDTH // 2, HEIGHT // 2])
+
     # Draw everything
     screen.fill(BACKGROUND_COLOR)
-    pygame.draw.circle(screen, BODY1_COLOR, body1.astype(int), body1_radius)
-    pygame.draw.circle(screen, BODY2_COLOR, body2.astype(int), body2_radius)
+    pygame.draw.circle(screen, BODY1_COLOR, body1_screen_pos.astype(int), body1_radius)
+    pygame.draw.circle(screen, BODY2_COLOR, body2_screen_pos.astype(int), body2_radius)
     
     # Update display
     pygame.display.flip()
