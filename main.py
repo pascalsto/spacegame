@@ -12,8 +12,6 @@ pygame.display.set_caption('Spacegame')
 
 # Colors
 BACKGROUND_COLOR = (0, 0, 0)
-# BODY1_COLOR = (255, 100, 0)
-# BODY2_COLOR = (255, 200, 100)
 BODY_COLOR = np.array([[0, 0, 255], [255, 100, 0], [255, 200, 100]])
 
 body_radius = np.array([3, 30, 10])
@@ -36,20 +34,6 @@ body_acc[1] = np.array([0, 0])
 body[2] = np.array([WIDTH // 2 + 70, HEIGHT // 2])
 body_speed[2] = np.array([0, 0])
 body_acc[2] = np.array([0, 0])
-
-# # Body 1 settings
-# body1_radius = 30
-# body1_mass = 10e2
-# body1= np.array([WIDTH // 2 - 50, HEIGHT // 2], dtype=float) # // integer division damit keine Pixel gesplittet werden
-# body1_speed = np.array([0, 3], dtype=float)
-# body1_acc = np.array([0, 0], dtype=float)
-
-# # Body 2 settings
-# body2_radius = 10
-# body2_mass = 10e2
-# body2 = np.array([WIDTH // 2 + 50, HEIGHT // 2], dtype=float)
-# body2_speed = np.array([0, -2], dtype=float)
-# body2_acc = np.array([0, 0], dtype=float)
 
 # Constants
 G = 30e-3
@@ -89,23 +73,6 @@ while True:
     # Offset basierend auf der Position von Body 0
     offset = np.array([WIDTH // 2, HEIGHT // 2]) - body[0]
 
-    
-    # distance_b1b2 = np.linalg.norm(body2 - body1)
-    # if distance_b1b2 < 1:
-    #     distance_b1b2 = 1
-    
-    # # Beschleunigungen berechnen
-    # body1_acc = (G * body2_mass * (body2 - body1))/(distance_b1b2**3)
-    # body2_acc = (G * body1_mass * (body1 - body2))/(distance_b1b2**3)
-    
-    # # Update body 1 position
-    # body1_speed += body1_acc
-    # body1 += body1_speed
-    
-    # # Update body 2 position
-    # body2_speed += body2_acc
-    # body2 += body2_speed
-
     # Draw everything
     screen.fill(BACKGROUND_COLOR)
     
@@ -113,9 +80,6 @@ while True:
         # Transformiere die Position relativ zu Body 0
         transformed_position = body[i] + offset
         pygame.draw.circle(screen, BODY_COLOR[i], transformed_position.astype(int), body_radius[i])
-    
-    # pygame.draw.circle(screen, BODY1_COLOR, body1.astype(int), body1_radius)
-    # pygame.draw.circle(screen, BODY2_COLOR, body2.astype(int), body2_radius)
     
     # Update display
     pygame.display.flip()
