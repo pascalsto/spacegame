@@ -60,25 +60,11 @@ while True:
     # Update body 2 position
     body2_speed += body2_acc
     body2 += body2_speed
-    
-    # Kamera folgt den Körpern, wenn sie nahe an die Bildschirmränder kommen
-    if body1[0] < camera_position[0] - WIDTH // 4:
-        camera_position[0] = body1[0] + WIDTH // 4
-    elif body1[0] > camera_position[0] + WIDTH // 4:
-        camera_position[0] = body1[0] - WIDTH // 4
-    if body1[1] < camera_position[1] - HEIGHT // 4:
-        camera_position[1] = body1[1] + HEIGHT // 4
-    elif body1[1] > camera_position[1] + HEIGHT // 4:
-        camera_position[1] = body1[1] - HEIGHT // 4
-    
-    # Berechne die relativen Positionen zur Kamera
-    body1_screen_pos = body1 - camera_position + np.array([WIDTH // 2, HEIGHT // 2])
-    body2_screen_pos = body2 - camera_position + np.array([WIDTH // 2, HEIGHT // 2])
 
     # Draw everything
     screen.fill(BACKGROUND_COLOR)
-    pygame.draw.circle(screen, BODY1_COLOR, body1_screen_pos.astype(int), body1_radius)
-    pygame.draw.circle(screen, BODY2_COLOR, body2_screen_pos.astype(int), body2_radius)
+    pygame.draw.circle(screen, BODY1_COLOR, body1.astype(int), body1_radius)
+    pygame.draw.circle(screen, BODY2_COLOR, body2.astype(int), body2_radius)
     
     # Update display
     pygame.display.flip()
