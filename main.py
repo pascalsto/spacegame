@@ -53,6 +53,20 @@ while True:
     
     body_acc[:] = 0                         # Beschleunigungen in jedem Frame resetten, sonst System instabil
     
+    keys = pygame.key.get_pressed()         # Abfrage, welche Tasten gerade gedrückt werden
+    
+    # Antriebssteuerung (WASD)
+    player_acc = 50e-3
+    
+    if keys[pygame.K_w]:
+        body_acc[0, 1] = - player_acc
+    if keys[pygame.K_s]:
+        body_acc[0, 1] = player_acc
+    if keys[pygame.K_a]:
+        body_acc[0, 0] = - player_acc
+    if keys[pygame.K_d]:
+        body_acc[0, 0] = player_acc
+    
     for i in range(len(body)):              # Berechnung der Beschleunigung
         for j in range(len(body)):
             if i != j:
